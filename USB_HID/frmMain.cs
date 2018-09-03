@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
+
 namespace USB_HID
 {
     public partial class frmMain : Form
@@ -33,7 +34,7 @@ namespace USB_HID
             /// Init the USB Relay Libary
             /// </summary>
             /// <returns>This function returns 0 on success and -1 on error.</returns>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_init")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_init")]
             public static extern int Init();
 
             /// <summary>
@@ -43,14 +44,14 @@ namespace USB_HID
             /// memory leaks.
             /// </summary>
             /// <returns>This function returns 0 on success and -1 on error.</returns>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_exit")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_exit")]
             public static extern int Exit();
 
             /// <summary>
             /// Enumerate the USB Relay Devices.
             /// </summary>
             /// <returns></returns>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_device_enumerate")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_device_enumerate")]
             public static extern IntPtr usb_relay_device_enumerate();
 
             public static UsbRelayDeviceInfo Enumerate()
@@ -65,7 +66,7 @@ namespace USB_HID
             /// Free an enumeration Linked List
             /// </summary>
             /// <param name="deviceInfo"></param>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_device_free_enumerate")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_device_free_enumerate")]
             public static extern void FreeEnumerate(UsbRelayDeviceInfo deviceInfo);
 
             /// <summary>
@@ -74,7 +75,7 @@ namespace USB_HID
             /// <param name="serialNumber"></param>
             /// <param name="stringLength"></param>
             /// <returns>This funcation returns a valid handle to the device on success or NULL on failure.</returns>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_device_open_with_serial_number", CharSet = CharSet.Ansi)]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_device_open_with_serial_number", CharSet = CharSet.Ansi)]
             public static extern int OpenWithSerialNumber([MarshalAs(UnmanagedType.LPStr)] string serialNumber, int stringLength);
 
             /// <summary>
@@ -82,14 +83,14 @@ namespace USB_HID
             /// </summary>
             /// <param name="deviceInfo"></param>
             /// <returns>This funcation returns a valid handle to the device on success or NULL on failure.</returns>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_device_open")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_device_open")]
             public static extern int Open(UsbRelayDeviceInfo deviceInfo);
 
             /// <summary>
             /// Close a usb relay device
             /// </summary>
             /// <param name="hHandle"></param>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_device_close")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_device_close")]
             public static extern void Close(int hHandle);
 
             /// <summary>
@@ -98,7 +99,7 @@ namespace USB_HID
             /// <param name="hHandle">Which usb relay device your want to operate</param>
             /// <param name="index">Which channel your want to open</param>
             /// <returns>0 -- success; 1 -- error; 2 -- index is outnumber the number of the usb relay device</returns>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_device_open_one_relay_channel")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_device_open_one_relay_channel")]
             public static extern int OpenOneRelayChannel(int hHandle, int index);
 
             /// <summary>
@@ -106,7 +107,7 @@ namespace USB_HID
             /// </summary>
             /// <param name="hHandle">which usb relay device your want to operate</param>
             /// <returns>0 -- success; 1 -- error</returns>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_device_open_all_relay_channel")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_device_open_all_relay_channel")]
             public static extern int OpenAllRelayChannels(int hHandle);
 
             /// <summary>
@@ -115,7 +116,7 @@ namespace USB_HID
             /// <param name="hHandle">which usb relay device your want to operate</param>
             /// <param name="index">which channel your want to close</param>
             /// <returns>0 -- success; 1 -- error; 2 -- index is outnumber the number of the usb relay device</returns>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_device_close_one_relay_channel")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_device_close_one_relay_channel")]
             public static extern int CloseOneRelayChannel(int hHandle, int index);
 
             /// <summary>
@@ -123,7 +124,7 @@ namespace USB_HID
             /// </summary>
             /// <param name="hHandle">hich usb relay device your want to operate</param>
             /// <returns>0 -- success; 1 -- error</returns>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_device_close_all_relay_channel")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_device_close_all_relay_channel")]
             public static extern int CloseAllRelayChannels(int hHandle);
 
             /// <summary>
@@ -134,7 +135,7 @@ namespace USB_HID
             /// <param name="hHandle"></param>
             /// <param name="status"></param>
             /// <returns>0 -- success; 1 -- error</returns>
-            [DllImport("USB_RELAY_DEVICE.dll", EntryPoint = "usb_relay_device_get_status")]
+            [DllImport("usb_relay_device.dll", EntryPoint = "usb_relay_device_get_status")]
             public static extern int GetStatus(int hHandle, ref int status);
         }
 
@@ -164,7 +165,36 @@ namespace USB_HID
 
         #endregion
 
+        private void btnFindDevice_Click(object sender, EventArgs e)
+        {
 
+            if (UsbRelayDevice.Init()!= 0)
+            {
+                Console.WriteLine("Couldn't initialize!");
+                MessageBox.Show("Couldn't initialize!");
+                return;
+            }
+            else 
+            { 
+                Console.WriteLine("Initialized successfully!"); 
+            }
+
+            List<UsbRelayDeviceInfo> devicesInfos = new List<UsbRelayDeviceInfo>();
+            UsbRelayDeviceInfo deviceInfo = UsbRelayDevice.Enumerate();
+            devicesInfos.Add(deviceInfo);
+           
+            while (deviceInfo.Next.ToInt32() > 0)
+            {
+                deviceInfo = (UsbRelayDeviceInfo)Marshal.PtrToStructure(deviceInfo.Next, typeof(UsbRelayDeviceInfo));
+                devicesInfos.Add(deviceInfo);
+            }
+
+            foreach (var device in devicesInfos)
+            {
+                comboDeviceList.Items.Add(device.SerialNumber);
+            }
+            
+        }
 
 
     }

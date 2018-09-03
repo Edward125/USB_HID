@@ -1,0 +1,10 @@
+E:\Edward\Code\USB_HID\USB_HID\bin\Debug\USB_HID.exe
+E:\Edward\Code\USB_HID\USB_HID\bin\Debug\USB_HID.pdb
+E:\Edward\Code\USB_HID\USB_HID\obj\Debug\USB_HID.frmMain.resources
+E:\Edward\Code\USB_HID\USB_HID\obj\Debug\USB_HID.Properties.Resources.resources
+E:\Edward\Code\USB_HID\USB_HID\obj\Debug\USB_HID.csproj.GenerateResource.Cache
+E:\Edward\Code\USB_HID\USB_HID\obj\Debug\USB_HID.exe
+E:\Edward\Code\USB_HID\USB_HID\obj\Debug\USB_HID.pdb
+E:\Edward\Code\USB_HID\USB_HID\bin\Debug\usb_relay_device.dll
+E:\Edward\Code\USB_HID\USB_HID\obj\Debug\USB_HID.csprojResolveAssemblyReference.cache
+E:\Edward\Code\USB_HID\USB_HID\obj\Debug\USB_HID.Splash.resources

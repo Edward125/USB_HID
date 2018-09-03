@@ -107,6 +107,7 @@
             this.btnOpenDevice.TabIndex = 3;
             this.btnOpenDevice.Text = "Open Device";
             this.btnOpenDevice.UseVisualStyleBackColor = true;
+            this.btnOpenDevice.Click += new System.EventHandler(this.btnOpenDevice_Click);
             // 
             // btnCloseDevice
             // 

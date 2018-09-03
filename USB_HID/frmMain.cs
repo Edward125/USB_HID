@@ -309,6 +309,16 @@ namespace USB_HID
                 updateMsg(lstMsg ,"Select device SN:" + devicesInfos[i].SerialNumber + ",Type:" + devicesInfos[i].Type.ToString());
 
             }
+
+            if (_deviceHandle > 0)
+
+                _deviceHandle = 0;
+        }
+
+        private void btnOpenDevice_Click(object sender, EventArgs e)
+        {
+            UsbRelayDeviceInfo currentdevice = devicesInfos[comboDeviceList.SelectedIndex];
+            _deviceHandle = UsbRelayDevice.OpenWithSerialNumber(currentdevice.SerialNumber, 0);
         }
 
 

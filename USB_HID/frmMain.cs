@@ -18,10 +18,16 @@ namespace USB_HID
             InitializeComponent();
         }
 
+
+
+        List<UsbRelayDeviceInfo> devicesInfos = new List<UsbRelayDeviceInfo>();
+        int _deviceHandle = 0;
+
+
         private void frmMain_Load(object sender, EventArgs e)
         {
-
-
+            this.Text = "USB HID Relay Controller,ver.:" + Application.ProductVersion;
+            InitUI();
 
         }
 
@@ -168,21 +174,36 @@ namespace USB_HID
         private void btnFindDevice_Click(object sender, EventArgs e)
         {
 
-            if (UsbRelayDevice.Init()!= 0)
+            FindDevices(comboDeviceList);
+            
+        }
+
+
+
+
+
+
+
+        private void FindDevices(ComboBox combodevicelist)
+        {
+            combodevicelist.Items.Clear();
+            devicesInfos.Clear();
+
+            if (UsbRelayDevice.Init() != 0)
             {
                 Console.WriteLine("Couldn't initialize!");
                 MessageBox.Show("Couldn't initialize!");
                 return;
             }
-            else 
-            { 
-                Console.WriteLine("Initialized successfully!"); 
+            else
+            {
+                Console.WriteLine("Initialized successfully!");
             }
 
-            List<UsbRelayDeviceInfo> devicesInfos = new List<UsbRelayDeviceInfo>();
+           
             UsbRelayDeviceInfo deviceInfo = UsbRelayDevice.Enumerate();
             devicesInfos.Add(deviceInfo);
-           
+
             while (deviceInfo.Next.ToInt32() > 0)
             {
                 deviceInfo = (UsbRelayDeviceInfo)Marshal.PtrToStructure(deviceInfo.Next, typeof(UsbRelayDeviceInfo));
@@ -191,10 +212,105 @@ namespace USB_HID
 
             foreach (var device in devicesInfos)
             {
-                comboDeviceList.Items.Add(device.SerialNumber);
+                combodevicelist.Items.Add(device.SerialNumber);
+                updateMsg(lstMsg, "FInd device,SN:" + device.SerialNumber + "," + "Type:" + device.Type.ToString());
             }
+
+            if (combodevicelist.Items.Count > 0)
+                combodevicelist.SelectedIndex = 0;
             
         }
+
+
+
+
+
+        private void updateMsg(ListBox listbox,string msg)
+        {
+            if (listbox.Items.Count > 1000)
+                listbox.Items.RemoveAt(0);
+
+            lstMsg.Items.Add(DateTime.Now.ToString("HH:mm:ss") + "->" + msg);
+
+
+            if (listbox.Items.Count > 0)
+                listbox.TopIndex = listbox.Items.Count - 1;
+            else
+                listbox.TopIndex = 0;
+        }
+
+
+
+
+
+        private void InitUI()
+        {
+            
+            btnOpenDevice.Enabled = false;
+            btnOpenRelay1.Enabled = false;
+            btnOpenRelay2.Enabled = false;
+            btnOpenRelay3.Enabled = false;
+            btnOpenRelay4.Enabled = false;
+            btnOpenRelay5.Enabled = false;
+            btnOpenRelay6.Enabled = false;
+            btnOpenRelay7.Enabled = false;
+            btnOpenRelay8.Enabled = false;
+            btnOpenAll.Enabled = false;
+
+            btnCloseDevice.Enabled = false;
+            btnCloseRelay1.Enabled = false;
+            btnCloseRelay2.Enabled = false;
+            btnCloseRelay3.Enabled = false;
+            btnCloseRelay4.Enabled = false;
+            btnCloseRelay5.Enabled = false;
+            btnCloseRelay6.Enabled = false;
+            btnCloseRelay7.Enabled = false;
+            btnCloseRelay8.Enabled = false;
+            btnCloseAll.Enabled = false;
+
+
+        }
+
+
+        private void FindDeviceUI(UsbRelayDeviceType _usbrelaydevicetype)
+        {
+
+            switch (_usbrelaydevicetype)
+            {
+                case UsbRelayDeviceType.OneChannel:
+                    btnOpenDevice.Enabled = true;
+                    btnCloseDevice.Enabled = true;
+                    btnOpenRelay1.Enabled = true;
+                    btnCloseRelay1.Enabled = true;
+                    btnOpenAll.Enabled = true;
+                    btnCloseAll.Enabled = true;
+                    lblDeviceStatus.BackColor = Color.White;
+                    lblRelayStatus1.BackColor = Color.White;
+                    
+                    break;
+                case UsbRelayDeviceType.TwoChannel:
+                    break;
+                case UsbRelayDeviceType.FourChannel:
+                    break;
+                case UsbRelayDeviceType.EightChannel:
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        private void comboDeviceList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int i = comboDeviceList.SelectedIndex;
+            if (i != -1)
+            {
+                FindDeviceUI(devicesInfos[i].Type);
+                updateMsg(lstMsg ,"Select device SN:" + devicesInfos[i].SerialNumber + ",Type:" + devicesInfos[i].Type.ToString());
+
+            }
+        }
+
 
 
     }
